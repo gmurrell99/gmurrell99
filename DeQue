@@ -1,0 +1,37 @@
+import java.util.Deque;
+import java.util.LinkedList;
+
+public class BrowserHistoryImpl implements BrowserHistory {
+
+    private final Deque<String> history;
+    private int currentPosition;
+
+    public BrowserHistoryImpl(String homepage) {
+        history = new LinkedList<>();
+        history.push(homepage);
+        currentPosition = 0;
+    }
+
+    @Override
+    public void visit(String url) {
+        // Clear future history
+        while (history.size() - 1 > currentPosition) {
+            history.pop();
+        }
+
+        history.push(url);
+        currentPosition++;
+    }
+
+    @Override
+    public String back(int steps) {
+        currentPosition = Math.max(0, currentPosition - steps);
+        return history.get(currentPosition);
+    }
+
+    @Override
+    public String forward(int steps) {
+        currentPosition = Math.min(history.size() - 1, currentPosition + steps);
+        return history.get(currentPosition);
+    }
+}
