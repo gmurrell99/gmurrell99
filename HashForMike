@@ -1,0 +1,106 @@
+import java.util.HashMap;
+
+public class OnlineStoreDatabaseImpl implements OnlineStoreDatabase {
+
+    private final HashMap<Integer, Product> products;
+    private final HashMap<Integer, Customer> customers;
+    private int nextProductId = 1;
+    private int nextCustomerId = 1;
+
+    public OnlineStoreDatabaseImpl() {
+        products = new HashMap<>();
+        customers = new HashMap<>();
+    }
+
+    // Product Operations
+
+    @Override
+    public void addProduct(String name, double price, int quantity) {
+        products.put(nextProductId, new Product(nextProductId++, name, price, quantity));
+    }
+
+    @Override
+    public void updateProduct(int productId, String name, Double price, Integer quantity) {
+        Product product = products.get(productId);
+        if (product != null) {
+            if (name != null) {
+                product.setName(name);
+            }
+            if (price != null) {
+                product.setPrice(price);
+            }
+            if (quantity != null) {
+                product.setQuantity(quantity);   
+
+            }
+        }
+    }
+
+    @Override
+    public void deleteProduct(int productId) {
+        products.remove(productId);
+    }
+
+    // Customer Operations
+
+    @Override
+    public void addCustomer(String name, String address) {
+        customers.put(nextCustomerId, new Customer(nextCustomerId++, name, address));
+    }
+
+    @Override
+    public void updateCustomer(int customerId, String name, String address) {
+        Customer customer = customers.get(customerId);
+        if (customer != null) {
+            if (name != null) {
+                customer.setName(name);
+            }
+            if (address != null) {
+                customer.setAddress(address);
+            }
+        }
+    }
+
+    @Override
+    public void deleteCustomer(int customerId) {
+        customers.remove(customerId);
+    }
+
+    // Order Placement
+
+    @Override
+    public void placeOrder(int customerId, int productId, int quantity) {
+        Product product = products.get(productId);
+        if (product != null && product.getQuantity() >= quantity) {
+            product.setQuantity(product.getQuantity() - quantity);
+            // Order details can be stored here (optional)
+        } else {
+            System.out.println("Insufficient product quantity for order.");
+        }
+    }
+
+    // Information Display
+
+    @Override
+    public String displayProducts() {
+        StringBuilder sb = new StringBuilder();
+        for (Product product : products.values()) {
+            sb.append(product).append("\n");
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public String displayCustomers() {
+        StringBuilder sb = new StringBuilder();
+        for (Customer customer : customers.values()) {
+            sb.append(customer).append("\n");
+        }
+        return sb.toString();
+    }
+}
+Use code with caution.
+Explanation:
+
+HashMaps for Products and Customers:
+
